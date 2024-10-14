@@ -5,10 +5,10 @@ from datetime import datetime
 vauxi=''
 
 def procesarcheques(dnicliente, tipocheque, estado=None, rangofecha=None):
-    cheques=[]
+    resultados=[]
 
     #abro el archivo csv
-    with open('listado_cheques.cvs', mode='r') as archivo:
+    with open('listado_cheques.csv', mode='r') as archivo:
         lector=csv.DictReader(archivo)
     for linea in lector:
         # Filtrar por DNI
@@ -67,7 +67,7 @@ while vauxi != 'no':
     rangofecha= None
 
     # Llama a la función de procesamiento
-    resultados = procesarcheques(archivocsv, dnicliente, tipocheque, estado, rangofecha)
+    resultados = procesarcheques('listado_cheques2', dnicliente, tipocheque, estado, rangofecha)
 
      # Muestro resultados o exporto  a un CSV
     if resultados:
