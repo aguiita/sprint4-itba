@@ -49,12 +49,15 @@ def procesarcheques(dnicliente, tipocheque, estado=None, rangofecha=None):
 
 def exportar_a_un_csv(resultados,dnicliente):
     timestamp=int(time.time())
-   
-
+    nombre_archivo=f"{dnicliente}_{timestamp}.csv"
+    with open (nombre_archivo, mode='w') as archivo:
+        auxi=csv.DictWriter(archivo, fieldnames=resultados[0].keys())
+        auxi.writeheader()
+        auxi.writerows(resultados)
+    print(f"Nuevo archivo exportado:{nombre_archivo}")    
 
 vauxi = ''
 while vauxi != 'no':
-    archivocsv = input('Ingrese el nombre del archivo CSV: ')
     dnicliente = input('Ingrese el DNI del cliente: ')
     tipocheque = input('Ingrese el tipo de cheque (EMITIDO/DEPOSITADO): ')
     estado = input('Ingrese el estado del cheque (opcional): ')
@@ -63,10 +66,25 @@ while vauxi != 'no':
     rangofechainput = input('Ingrese el rango de fechas YYYY-MM-DD:YYYY-MM-DD (opcional): ')
     rangofecha= None
 
-    vauxi = input('¿desea continuar ingresando datos? (si/no): ')
-    
     # Llama a la función de procesamiento
     resultados = procesarcheques(archivocsv, dnicliente, tipocheque, estado, rangofecha)
+
+     # Muestro resultados o exporto  a un CSV
+    if resultados:
+        salida = input('¿desea ver los resultados en PANTALLA o exportarlos a CSV?: ').upper()
+        if salida == 'PANTALLA':
+            print("Resultados que se encontraron:")
+            for resultado in resultados:
+                print(resultado)
+            #sino :
+    
+        elif salida == 'CSV':
+            exportar_a_un_csv(resultados, dnicliente)
+    else:
+        print("No se encontraron cheques que coincidan .")
+
+
+    vauxi = input('¿desea continuar ingresando datos? (si/no): ')
     
     # Muestro resultados
     print("Resultados encontrados:")
